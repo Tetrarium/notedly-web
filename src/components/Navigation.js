@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import Button from "./Button";
 
 const Nav = styled.nav`
 	padding: 1em;
