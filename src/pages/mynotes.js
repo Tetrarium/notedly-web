@@ -1,4 +1,8 @@
 import React, { useEffect } from "react";
+import { useQuery, gql } from "@apollo/client";
+
+import NoteFeed from "../components/NoteFeed";
+import { GET_MY_NOTES } from "../gql/query";
 
 const MyNotes = () => {
 	useEffect(() => {
@@ -6,12 +10,19 @@ const MyNotes = () => {
 		document.title = 'My Notes - Notedly';
 	});
 
-	return (
-		<div>
-			<h1>Notedly</h1>
-			<p>This are my notes</p>
-		</div>
-	);
+	const { loading, error, data } = useQuery(GET_MY_NOTES);
+
+	// Если данные загружаются, выдаем сообщение о загрузке
+	if (loading) return 'Loading...';
+	// Если при загрузке произошел сбой, выдаем сообщение об ошибке
+	if (error) return `Error! ${error.message}`;
+	// Если запрос выполнен успешно, но заметок в нем нет
+	// выдаем сообщение "Заметки отсутствуют"
+	if (data.me.notes.length !== 0) {
+		return <NoteFeed notes={data.me.notes} />;
+	} else {
+		return <p>No notes yet</p>;
+	}
 };
 
 export default MyNotes;
